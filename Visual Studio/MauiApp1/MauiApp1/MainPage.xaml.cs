@@ -91,5 +91,15 @@ public partial class MainPage : ContentPage
 
     }
     #endregion
+
+    private void skiaView_PaintSurface(object sender, SkiaSharp.Views.Maui.SKPaintSurfaceEventArgs e)
+    {
+
+    }
+
+    private void skiaView_Touch(object sender, SkiaSharp.Views.Maui.SKTouchEventArgs e)
+    {
+
+    }
 }
 
