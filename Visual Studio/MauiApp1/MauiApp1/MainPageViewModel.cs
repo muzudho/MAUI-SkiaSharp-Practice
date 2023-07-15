@@ -15,7 +15,7 @@
         // - パブリック・プロパティ
 
         #region プロパティ（画像ファイルパス）
-        string imageFilePath = @"C:\Users\むずでょ\Documents\GitHub\MAUI-IDrawable-Practice\Workspace\adventure_field.png";
+        string imageFilePath = @"C:\Users\むずでょ\Documents\GitHub\MAUI-SkiaSharp-Practice\Workspace\adventure_field.png";
 
         /// <summary>
         ///     画像ファイルパス
