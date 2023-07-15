@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:local="clr-namespace:MauiApp1"
+             xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="MauiApp1.MainPage"
              x:Name="thisContentPage">
@@ -37,7 +38,7 @@
                    Source="{Binding ImageFilePath}"/>
 
             <Label
-                Text="Drawing"
+                Text="GraphicsView"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
                 HorizontalOptions="Center" />
@@ -52,6 +53,12 @@
                 </GraphicsView.Drawable>
             </GraphicsView>
 
+            <Label
+                Text="SKCanvasView"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
             <!-- スキア・シャープのキャンバスを使う
             <skia:SKCanvasView x:Name="skiaView"
                                EnableTouchEvents="True"
@@ -59,6 +66,7 @@
                                PaintSurface="skiaView_PaintSurface"
                                Touch="skiaView_Touch"/>
             -->
+            <skia:SKCanvasView x:Name="skiaView"/>
 
         </VerticalStackLayout>
     </ScrollView>
