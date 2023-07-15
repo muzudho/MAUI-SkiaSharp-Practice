@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:local="clr-namespace:MauiApp1"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MauiApp1.MainPage"
+             x:Name="thisContentPage">
+
+    <!-- 束縛しているビューモデル -->
+    <ContentPage.BindingContext>
+        <local:MainPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout
+            Spacing="25"
+            Padding="30,0"
+            VerticalOptions="Center">
+
+            <Label Text="元画像ファイルパス"/>
+            <Entry Placeholder="C\:"
+                   Text="{Binding ImageFilePath}"/>
+
+            <Button Text="画像読込"
+                    Clicked="LoadImageButton_Clicked"></Button>
+
+            <Label
+                Text="Image"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <!-- 画像を表示するだけなら Image 要素で充分 -->
+            <Image WidthRequest="100" HeightRequest="100"
+                   Source="{Binding ImageFilePath}"/>
+
+            <Label
+                Text="Drawing"
+                SemanticProperties.HeadingLevel="Level1"
+                FontSize="32"
+                HorizontalOptions="Center" />
+
+            <!-- ２Ｄ描画を行うなら GraphicsView がキャンバスになる -->
+            <GraphicsView HorizontalOptions="Center"
+                          WidthRequest="100" HeightRequest="100"
+                          x:Name="graphicsView1">
+                <GraphicsView.Drawable>
+                    <local:SimpleDrawing BindingContext="{x:Reference thisContentPage}"
+                                         SourceImage="{Binding MainPageVM.Image}"/>
+                </GraphicsView.Drawable>
+            </GraphicsView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
