@@ -2,7 +2,6 @@
 
 #if IOS || ANDROID || MACCATALYST
 using Microsoft.Maui.Graphics.Platform;
-// using SkiaSharp;
 #elif WINDOWS
 using Microsoft.Maui.Graphics.Win2D;
 using System.Diagnostics;
@@ -10,11 +9,10 @@ using System.Net;
 #endif
 
 using Microsoft.Maui.Controls;
-/*
 using SkiaSharp;
 using SkiaSharp.Views.Maui;
 using SkiaSharp.Views.Maui.Controls;
-*/
+using System.IO;
 
 public partial class MainPage : ContentPage
 {
@@ -41,14 +39,12 @@ public partial class MainPage : ContentPage
 
     // - プライベート・プロパティ
 
-    /*
     #region プロパティ（タッチ位置）
     /// <summary>
     ///     タッチ位置
     /// </summary>
     SKPoint? touchLocation;
     #endregion
-    */
 
     // - プライベート・イベントハンドラ
 
@@ -68,8 +64,9 @@ public partial class MainPage : ContentPage
         // 画像の読込
         // ==========
         //
-        var task = Task.Run(() =>
+        var task = Task.Run(async () =>
         {
+            // ↓ MAUI の流儀
             try
             {
                 // タイル・セット読込（読込元：　ウィンドウズ・ローカルＰＣ）
@@ -105,12 +102,35 @@ public partial class MainPage : ContentPage
             {
                 // TODO エラー対応どうする？
             }
+
+            // ↓ SkiaSharp の流儀
+            try
+            {
+                // タイル・セット読込（読込元：　ウィンドウズ・ローカルＰＣ）
+                using (Stream inputFileStream = System.IO.File.OpenRead(bindingContext.ImageFilePath))
+                {
+                    // ↓ SkiaSharp の流儀
+                    using (MemoryStream memStream = new MemoryStream())
+                    {
+                        await inputFileStream.CopyToAsync(memStream);
+                        memStream.Seek(0, SeekOrigin.Begin);
+
+                        bindingContext.SKBitmap = SKBitmap.Decode(memStream);
+                    };
+
+                    // 再描画
+                    skiaView1.InvalidateSurface();
+                }
+            }
+            catch (Exception ex)
+            {
+                // TODO エラー対応どうする？
+            }
         });
 
     }
     #endregion
 
-    /*
     #region イベントハンドラ（表面の描画時）
     /// <summary>
     ///     表面の描画時
@@ -119,9 +139,12 @@ public partial class MainPage : ContentPage
     /// <param name="e">イベント</param>
     private void skiaView_PaintSurface(object sender, SkiaSharp.Views.Maui.SKPaintSurfaceEventArgs e)
     {
-#if IOS || ANDROID || MACCATALYST
-#elif WINDOWS
-#endif
+        var bindingContext = this.BindingContext as MainPageViewModel;
+
+        //
+        // タッチしたところにテキストを置くというサンプルか？
+        // ==================================================
+        //
 
         // the the canvas and properties
         var canvas = e.Surface.Canvas;
@@ -144,6 +167,14 @@ public partial class MainPage : ContentPage
             ? new SKPoint(loc.X, loc.Y)
             : new SKPoint(e.Info.Width / 2, (e.Info.Height + paint.TextSize) / 2);
 
+        // 画像描画
+        if (bindingContext.SKBitmap!=null)
+        {
+            canvas.DrawImage(
+                image: SKImage.FromBitmap(bindingContext.SKBitmap),
+                p: coord);
+        }
+
         // draw some text
         canvas.DrawText("SkiaSharp", coord, paint);
     }
@@ -155,18 +186,17 @@ public partial class MainPage : ContentPage
     /// </summary>
     /// <param name="sender">このイベントを送っているコントロール</param>
     /// <param name="e">イベント</param>
-    private void skiaView_Touch(object sender, SkiaSharp.Views.Maui.SKTouchEventArgs e)
+    void skiaView_Touch(object sender, SkiaSharp.Views.Maui.SKTouchEventArgs e)
     {
-        //if (e.InContact)
-        //    touchLocation = e.Location;
-        //else
-        //    touchLocation = null;
+        if (e.InContact)
+            touchLocation = e.Location;
+        else
+            touchLocation = null;
 
-        //skiaView.InvalidateSurface();
+        skiaView1.InvalidateSurface();
 
-        //e.Handled = true;
+        e.Handled = true;
     }
     #endregion
-    */
 }
 

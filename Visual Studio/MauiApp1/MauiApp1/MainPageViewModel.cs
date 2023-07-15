@@ -1,6 +1,7 @@
 ﻿namespace MauiApp1
 {
     using CommunityToolkit.Mvvm.ComponentModel;
+    using SkiaSharp;
     using TheGraphics = Microsoft.Maui.Graphics;
 
     /// <summary>
@@ -49,6 +50,26 @@
                 {
                     this.image = value;
                     this.OnPropertyChanged(nameof(Image));
+                }
+            }
+        }
+        #endregion
+
+        #region プロパティ（画像。ビットマップ形式）
+        SKBitmap skBitmap;
+
+        /// <summary>
+        ///     画像。ビットマップ形式
+        /// </summary>
+        public SKBitmap SKBitmap
+        {
+            get => this.skBitmap;
+            set
+            {
+                if (this.skBitmap != value)
+                {
+                    this.skBitmap = value;
+                    this.OnPropertyChanged(nameof(SKBitmap));
                 }
             }
         }

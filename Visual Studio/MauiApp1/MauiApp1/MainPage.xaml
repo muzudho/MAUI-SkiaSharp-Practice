@@ -20,9 +20,11 @@
             Padding="30,0"
             VerticalOptions="Center">
 
+            <!--
             <Label Text="元画像ファイルパス"/>
             <Entry Placeholder="C\:"
                    Text="{Binding ImageFilePath}"/>
+            -->
 
             <Button Text="画像読込"
                     Clicked="LoadImageButton_Clicked"></Button>
@@ -44,9 +46,9 @@
                 HorizontalOptions="Center" />
 
             <!-- ２Ｄ描画を行うなら GraphicsView がキャンバスになる -->
-            <GraphicsView HorizontalOptions="Center"
-                          WidthRequest="100" HeightRequest="100"
-                          x:Name="graphicsView1">
+            <GraphicsView x:Name="graphicsView1"
+                          HorizontalOptions="Center"
+                          WidthRequest="100" HeightRequest="100">
                 <GraphicsView.Drawable>
                     <local:SimpleDrawing BindingContext="{x:Reference thisContentPage}"
                                          SourceImage="{Binding MainPageVM.Image}"/>
@@ -59,14 +61,14 @@
                 FontSize="32"
                 HorizontalOptions="Center" />
 
-            <!-- スキア・シャープのキャンバスを使う
-            <skia:SKCanvasView x:Name="skiaView"
+            <!-- スキア・シャープのキャンバスを使う -->
+            <skia:SKCanvasView x:Name="skiaView1"
+                               HorizontalOptions="Center"
+                               WidthRequest="300" HeightRequest="300"
                                EnableTouchEvents="True"
                                IgnorePixelScaling="True"
                                PaintSurface="skiaView_PaintSurface"
                                Touch="skiaView_Touch"/>
-            -->
-            <skia:SKCanvasView x:Name="skiaView"/>
 
         </VerticalStackLayout>
     </ScrollView>
