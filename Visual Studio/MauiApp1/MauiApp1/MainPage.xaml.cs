@@ -18,14 +18,14 @@ public partial class MainPage : ContentPage
 {
     // - その他
 
-	#region その他（生成）
-	/// <summary>
-	///		生成
-	/// </summary>
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    #region その他（生成）
+    /// <summary>
+    ///		生成
+    /// </summary>
+    public MainPage()
+    {
+        InitializeComponent();
+    }
     #endregion
 
     // - パブリック・プロパティ
@@ -109,13 +109,16 @@ public partial class MainPage : ContentPage
                 // タイル・セット読込（読込元：　ウィンドウズ・ローカルＰＣ）
                 using (Stream inputFileStream = System.IO.File.OpenRead(bindingContext.ImageFilePath))
                 {
-                    // ↓ SkiaSharp の流儀
+                    // ↓ １つのストリームが使えるのは、１回切り
                     using (MemoryStream memStream = new MemoryStream())
                     {
                         await inputFileStream.CopyToAsync(memStream);
                         memStream.Seek(0, SeekOrigin.Begin);
 
                         bindingContext.SKBitmap = SKBitmap.Decode(memStream);
+
+                        // 画像処理（明度を下げる）
+                        ReduceBrightness.DoItInPlace(bindingContext.SKBitmap);
                     };
 
                     // 再描画
@@ -168,11 +171,8 @@ public partial class MainPage : ContentPage
             : new SKPoint(e.Info.Width / 2, (e.Info.Height + paint.TextSize) / 2);
 
         // 画像描画
-        if (bindingContext.SKBitmap!=null)
+        if (bindingContext.SKBitmap != null)
         {
-            // 画像処理（明度を下げる）
-            ReduceBrightness.DoItInPlace(bindingContext.SKBitmap);
-
             canvas.DrawImage(
                 image: SKImage.FromBitmap(bindingContext.SKBitmap),
                 p: coord);
@@ -191,6 +191,8 @@ public partial class MainPage : ContentPage
     /// <param name="e">イベント</param>
     void skiaView_Touch(object sender, SkiaSharp.Views.Maui.SKTouchEventArgs e)
     {
+        var bindingContext = this.BindingContext as MainPageViewModel;
+
         if (e.InContact)
             touchLocation = e.Location;
         else
