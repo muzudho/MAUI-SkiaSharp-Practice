@@ -170,6 +170,9 @@ public partial class MainPage : ContentPage
         // 画像描画
         if (bindingContext.SKBitmap!=null)
         {
+            // 画像処理（明度を下げる）
+            ReduceBrightness.DoItInPlace(bindingContext.SKBitmap);
+
             canvas.DrawImage(
                 image: SKImage.FromBitmap(bindingContext.SKBitmap),
                 p: coord);
